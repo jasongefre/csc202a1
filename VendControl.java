@@ -1,4 +1,5 @@
 import java.lang.Math;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.DateFormat;
@@ -13,11 +14,11 @@ public class VendControl
         //DATES
 	    DateFormat dateY = new SimpleDateFormat("yyyy");
 	    DateFormat dateM = new SimpleDateFormat("mm");
-	    DateFormat dateM = new SimpleDateFormat("mm");
+	    DateFormat dateD = new SimpleDateFormat("dd");
 	    Date date = new Date();
-	    int yyyy = Integer.parseInt(dateFormat.format(dateY));
-	    int mm = Integer.parseInt(dateFormat.format(dateM));
-	    int dd = Integer.parseInt(dateFormat.format(dateD));
+	    int yyyy = Integer.parseInt(dateY.format(date));
+	    int mm = Integer.parseInt(dateM.format(date));
+	    int dd = Integer.parseInt(dateD.format(date));
         yyyy*= 10000;
         mm*=100;
         //variables
@@ -203,9 +204,9 @@ public class VendControl
             }
         }
         //END PRINTING TO CONSOLE
-        yyyy = Integer.parseInt(dateFormat.format(dateY));
-	mm = Integer.parseInt(dateFormat.format(dateM));
-	dd = Integer.parseInt(dateFormat.format(dateD));
+        yyyy = Integer.parseInt(dateY.format(date));
+	mm = Integer.parseInt(dateM.format(date));
+	dd = Integer.parseInt(dateD.format(date));
         yyyy*= 10000;
         mm*=100;
         //EXPORT SALES
