@@ -14,6 +14,10 @@ public class Customer
     {
         return money;
     }
+    public void setMoney(int money)
+    {
+        this.money = money;
+    }
     public int getVm()
     {
         return vm;
