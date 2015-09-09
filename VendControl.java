@@ -1,6 +1,8 @@
 import java.lang.Math;
-import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 /**
  * Created by JMG on 9/8/2015.
  */
@@ -202,8 +204,8 @@ public class VendControl
         }
         //END PRINTING TO CONSOLE
         yyyy = Integer.parseInt(dateFormat.format(dateY));
-	    mm = Integer.parseInt(dateFormat.format(dateM));
-	    dd = Integer.parseInt(dateFormat.format(dateD));
+	mm = Integer.parseInt(dateFormat.format(dateM));
+	dd = Integer.parseInt(dateFormat.format(dateD));
         yyyy*= 10000;
         mm*=100;
         //EXPORT SALES
