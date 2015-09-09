@@ -1,27 +1,11 @@
+import java.lang.Math;
 import java.io.*;
 import java.util.ArrayList;
-
-/**
- * Created by JMG on 9/8/2015.
- */
-//*******************************************************************
-// Java compiler created in PHP to quickly and safely test code.
-// NOTE: please read the 'More Info' tab to the right for shortcuts.
-//*******************************************************************
-
-import java.lang.Math; // header stuff MUST go above the first class
-import java.io.*;
-import java.util.ArrayList;
-
 /**
  * Created by JMG on 9/8/2015.
  */
 public class VendControl
 {
-    /*
-        INVENTORY FORMAT:
-        NAME,PRICE,QTY,QTY,QTY...
-     */
     public static void main(String[] args)
     {
         //DATES
@@ -30,7 +14,6 @@ public class VendControl
         int mm = 9;
         mm*=100;
         int dd = 31;
-
         //variables
         String filepath = "C:/_Java/";
         String filename = "Inventory.txt";
@@ -40,7 +23,6 @@ public class VendControl
         ArrayList<Vending> vend = new ArrayList<>();
         ArrayList<String> iNames = new ArrayList<>();
         ArrayList<Integer> iPrice = new ArrayList<>();
-
         /////////////////////////////
         // DEFAULTS FOR DEBUGGING: //
         /////////////////////////////
@@ -50,15 +32,13 @@ public class VendControl
         int maxQuantity = 35;
       	boolean debug = true;
         boolean receipt = true;
-
         //////////////////////////////
         // PSEUDORANDOM CONTROLLERS //
         //////////////////////////////
-        int custCount = r(30); //number of potential clients
+        int custCount = r(200); //number of potential clients
         int custChance = 75; //liklihood of getting a customer
         int custMoney = 1000; //max amount of money in cents
         int custDesire = 5; //max number of items a customer will purchase
-
         //SEEK FOR NEWEST FILE; READ IT INTO INVENTORY
         while (!seek && !flag)
         {
@@ -66,7 +46,7 @@ public class VendControl
             try
             {
                 //CREATE VENDING MACHINES
-                vmNum = countVm(file);
+                if((vmNum = countVm(file))==-1) throw new FileNotFoundException();
                 for (int i = 0; i < vmNum; i++)
                 {
                     vend.add(new Vending(debug));
@@ -101,7 +81,7 @@ public class VendControl
                     dd--;
                 else
                 {
-                    if (mm > 800)
+                    if (mm > 100)
                     {
                         mm-=100;
                         dd = 31;
@@ -148,7 +128,6 @@ public class VendControl
         }
         //END LOADING OF INVENTORY
 
-
         //LOOP THROUGH RANDOM NUMBER OF CUSTOMERS
         for (int i = 0; i < custCount; i++)
         {
@@ -182,41 +161,54 @@ public class VendControl
         }
         //DONE LOOPING THROUGH CUSTOMERS
       
-      debug = false;
-      if(debug){
-        print("Sales Totals"); 
-        for (int i = 0; i < vmNum; i++) {
-          print("Vending machine " + i + " sold: $" + vend.get(i).total()/100 + "." + vend.get(i).total()%100 );///////////////////////////////////////////////////////////////////
-          Vending v = vend.get(i);
-          for (int i1 = 0; i1 < inTotal; i1++) {
-            print("  " + iNames.get(i1) + ": " + v.sold(iNames.get(i1)));
-          }
-        }
-        print("");
-        print("");
-        String l = "";
-        for (int i = 0; i < inTotal; i++) {
-          l= iNames.get(i) + "," + iPrice.get(i) + ",";
-          for (int i1 = 0; i1 < vmNum; i1++) {
-            if(i1<vmNum-1)
-            {
-              l = l + vend.get(i1).endQtyByName(iNames.get(i)) + ",";
+        //PRINT OUTPUT TO CONSOLE
+        debug = false;
+        if(debug)
+        {
+            String d = vend.get(i).total()/100;
+            String c = vend.get(i).total()%100;
+            if(c.length()<2) c = "0" + c;
+            print("Sales Totals"); 
+            for (int i = 0; i < vmNum; i++) {
+                print("Vending machine " + i + " sold: $" + d + "." + c );///////////////////////////////////////////////////////////////////
+                Vending v = vend.get(i);
+                for (int i1 = 0; i1 < inTotal; i1++) 
+                {
+                    print("  " + iNames.get(i1) + ": " + v.sold(iNames.get(i1)));
+                }
             }
-            else
+            print("");
+            print("");
+            String l = "";
+            for (int i = 0; i < inTotal; i++) 
             {
-              print(l + vend.get(i1).endQtyByName(iNames.get(i)));
+                l= iNames.get(i) + "," + iPrice.get(i) + ",";
+                for (int i1 = 0; i1 < vmNum; i1++) 
+                {
+                    if(i1<vmNum-1)
+                    {
+                        l = l + vend.get(i1).endQtyByName(iNames.get(i)) + ",";
+                    }
+                    else
+                    {
+                        print(l + vend.get(i1).endQtyByName(iNames.get(i)));
+                    }
+                }
             }
-          }
         }
-      }
-        //EXPORT RESULTS
+        //END PRINTING TO CONSOLE
+        
+        //EXPORT SALES
         try {
             File fileW = new File(filepath + (yyyy+mm+dd+1) + "Sales.txt");
             if(!fileW.exists()) fileW.createNewFile();
             PrintStream write = new PrintStream(fileW);
             write.println("Sales Totals");
                 for (int i = 0; i < vmNum; i++) {
-                    write.println("Vending machine " + i + " sold: $" + vend.get(i).total()/100 + "." + vend.get(i).total()%100 );
+                    String d = vend.get(i).total()/100;
+                    String c = vend.get(i).total()%100;
+                    if(c.length()<2) c = "0" + c;
+                    write.println("Vending machine " + i + " sold: $" + d + "." + c );
                     Vending v = vend.get(i);
                     for (int i1 = 0; i1 < inTotal; i1++) {
                       	write.println("  " + iNames.get(i1) + ": " + v.sold(iNames.get(i1)));
@@ -227,7 +219,7 @@ public class VendControl
         catch(Exception e) {
             e.printStackTrace();
         }
-
+        //END EXPORTING SALES
         //EXPORT INVENTORY
         try {
             File fileW = new File(filepath + (yyyy+mm+dd+1) + "Inventory.txt");
@@ -253,9 +245,8 @@ public class VendControl
         catch(Exception e) {
             e.printStackTrace();
         }
+        //END EXPORTING INVENTORY
     }
-
-
     private static int r(int num)
     {
         return (int)(Math.random()*num);
