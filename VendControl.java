@@ -9,11 +9,15 @@ public class VendControl
     public static void main(String[] args)
     {
         //DATES
-        int yyyy = 2015;
+	    DateFormat dateY = new SimpleDateFormat("yyyy");
+	    DateFormat dateM = new SimpleDateFormat("mm");
+	    DateFormat dateM = new SimpleDateFormat("mm");
+	    Date date = new Date();
+	    int yyyy = Integer.parseInt(dateFormat.format(dateY));
+	    int mm = Integer.parseInt(dateFormat.format(dateM));
+	    int dd = Integer.parseInt(dateFormat.format(dateD));
         yyyy*= 10000;
-        int mm = 9;
         mm*=100;
-        int dd = 31;
         //variables
         String filepath = "C:/_Java/";
         String filename = "Inventory.txt";
@@ -197,7 +201,11 @@ public class VendControl
             }
         }
         //END PRINTING TO CONSOLE
-        
+        yyyy = Integer.parseInt(dateFormat.format(dateY));
+	    mm = Integer.parseInt(dateFormat.format(dateM));
+	    dd = Integer.parseInt(dateFormat.format(dateD));
+        yyyy*= 10000;
+        mm*=100;
         //EXPORT SALES
         try {
             File fileW = new File(filepath + (yyyy+mm+dd+1) + "Sales.txt");
