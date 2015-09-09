@@ -3,18 +3,10 @@ import java.util.ArrayList;
 /**
  * Created by JMG on 9/8/2015.
  */
-//*******************************************************************
-// Java compiler created in PHP to quickly and safely test code.
-// NOTE: please read the 'More Info' tab to the right for shortcuts.
-//*******************************************************************
-
 import java.lang.Math; // header stuff MUST go above the first class
 import java.io.*;
 import java.util.ArrayList;
 
-/**
- * Created by JMG on 9/8/2015.
- */
 public class Vending {
     //PSEUDORANDOM LIMITERS
     ArrayList<Food> foods = new ArrayList<>();
@@ -97,9 +89,7 @@ public class Vending {
     {
         for (int i = 0; i < foods.size(); i++)
         {
-          	//print("seeking " + foods.get(i).getName() + "| WITH " + itemName);
           if(foods.get(i).getName()==itemName) {
-              	///print("found");
                 return "Before: " + foodStart.get(i) + " | After: " + foodEnd.get(i) + " | Total Sold: " + (foodStart.get(i)-foodEnd.get(i));
           }
         }
@@ -126,7 +116,6 @@ public class Vending {
         }
         return 0;
     }
-
     private static int r(int num)
     {
         return (int)(Math.random()*num);
