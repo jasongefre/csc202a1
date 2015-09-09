@@ -3,6 +3,18 @@ import java.util.ArrayList;
 /**
  * Created by JMG on 9/8/2015.
  */
+//*******************************************************************
+// Java compiler created in PHP to quickly and safely test code.
+// NOTE: please read the 'More Info' tab to the right for shortcuts.
+//*******************************************************************
+
+import java.lang.Math; // header stuff MUST go above the first class
+import java.io.*;
+import java.util.ArrayList;
+
+/**
+ * Created by JMG on 9/8/2015.
+ */
 public class Vending {
     //PSEUDORANDOM LIMITERS
     ArrayList<Food> foods = new ArrayList<>();
@@ -26,11 +38,17 @@ public class Vending {
     public int purchase (int itemchoice,int total, boolean reciept)
     {
         Food f = foods.get(itemchoice);
+        String d = "" + total/100;
+        String c = "" + total%100;
+        if(c.length()<2){c = "0" + c;}
         if(debug)
         {
-            print("Customer is attempting to purchase" + f.getName());
-            print("Money entered: " + total);
-            print("Money required: " + f.getPrice());
+            print("Customer is attempting to purchase " + f.getName());
+            print("Money entered: $" + d + "." + c + ".");
+            d = "" + f.getPrice()/100;
+            c = "" + f.getPrice()%100;
+            if(c.length()<2){c = "0" + c;}
+            print("Money required: $" + d + "." + c + ".");
             print("Quantity on hand: " + foodEnd.get(itemchoice));
         }
         if(total > f.getPrice() && foodEnd.get(itemchoice)>0)
@@ -49,15 +67,17 @@ public class Vending {
                     print("    Carbs:     " + f.getCarbohydrates());
                     print("    Protein:   " + f.getProtein());
                 }
+              	d = "" + total/100;
+              	c = "" + total%100;
+              if(c.length()<2){c = "0" + c;}
+              	print("Customer now has $" + d + "." + c + ".");
             }
-            
-            return total;
         }
         else
         {
             if(debug)
             {
-                if(total > f.getPrice())
+                if(total < f.getPrice())
                 {
                     print("NO PURCHASE, INSUFFICIENT FUNDS.");
                 }
@@ -66,20 +86,28 @@ public class Vending {
                     print("NO PURCHASE, INSUFFICIENT QUANTITY.");
                 }
             }
-            return 0;
+
         }
+        return total;
     }
     public int total(){
         return purchased;
     }
-    public int sold(String itemName)
+    public String sold(String itemName)
     {
         for (int i = 0; i < foods.size(); i++)
         {
-            if(foods.get(i).getName()==itemName)
-                return foodStart.get(i) - foodEnd.get(i);
+          	//print("seeking " + foods.get(i).getName() + "| WITH " + itemName);
+          if(foods.get(i).getName()==itemName) {
+              	///print("found");
+                return "Before: " + foodStart.get(i) + " | After: " + foodEnd.get(i) + " | Total Sold: " + (foodStart.get(i)-foodEnd.get(i));
+          }
         }
-        return 0;
+        return "Before: " + 0 + "|After: " + 0;
+    }
+  	public int getFoods()
+    {
+    	return foods.size(); 
     }
     public int endQtyByName(String itemName)
     {
