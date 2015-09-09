@@ -4,12 +4,23 @@ import java.util.ArrayList;
 /**
  * Created by JMG on 9/8/2015.
  */
+//*******************************************************************
+// Java compiler created in PHP to quickly and safely test code.
+// NOTE: please read the 'More Info' tab to the right for shortcuts.
+//*******************************************************************
+
+import java.lang.Math; // header stuff MUST go above the first class
+import java.io.*;
+import java.util.ArrayList;
+
+/**
+ * Created by JMG on 9/8/2015.
+ */
 public class VendControl
 {
     /*
         INVENTORY FORMAT:
         NAME,PRICE,QTY,QTY,QTY...
-
      */
     public static void main(String[] args)
     {
@@ -37,12 +48,13 @@ public class VendControl
         int inTotal = 40; //inventory total (count for number of items
         int maxCost = 250;
         int maxQuantity = 35;
-        boolean receipt = false;
+      	boolean debug = true;
+        boolean receipt = true;
 
         //////////////////////////////
         // PSEUDORANDOM CONTROLLERS //
         //////////////////////////////
-        int custCount = r(200); //number of potential clients
+        int custCount = r(30); //number of potential clients
         int custChance = 75; //liklihood of getting a customer
         int custMoney = 1000; //max amount of money in cents
         int custDesire = 5; //max number of items a customer will purchase
@@ -57,7 +69,7 @@ public class VendControl
                 vmNum = countVm(file);
                 for (int i = 0; i < vmNum; i++)
                 {
-                    vend.add(new Vending());
+                    vend.add(new Vending(debug));
                 }
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 seek = true;
@@ -116,7 +128,7 @@ public class VendControl
             vmNum = 3;
             for (int i = 0; i < vmNum; i++)
             {
-                vend.add(new Vending());
+                vend.add(new Vending(debug));
             }
             for (int i = 0; i < inTotal; i++)
             {
@@ -145,6 +157,12 @@ public class VendControl
             {
                 //RANDOM SELECTION TO DETERMINE WHICH VENDING MACHINE
                 Customer c = new Customer(r(custMoney),r(vmNum),r(custDesire));
+                if(debug){
+                  print("");
+                  print("");
+                  print("New customer arriving");
+                  print("Customer wishes to buy " + c.getDesire() + " items.");
+                }
                 //ATTEMPT TO PURCHASE RANDOM FOOD, MAKE 5 ATTEMPTS IN CASE OF INSUFFICIENT FUNDS (TRY ANOTHER ITEM)
                 for (int i1 = 0; i1 < c.getDesire(); i1++)
                 {
@@ -152,13 +170,45 @@ public class VendControl
                     int attempts = 0;
                     for (int i2 = 0; i2<5; i2++)
                     {
-                        c.setMoney(c.getMoney()-v.purchase(r(v.foods.size()),c.getMoney(),receipt));
+                      	int selected = r(v.foods.size());
+                      	int purchased = v.purchase(selected,c.getMoney(),receipt);
+                      	if (purchased!=c.getMoney()) {
+                        	c.setMoney(purchased);
+                          	i2 = 5;
+                        }
                     }
                 }
             }
         }
         //DONE LOOPING THROUGH CUSTOMERS
-
+      
+      debug = false;
+      if(debug){
+        print("Sales Totals"); 
+        for (int i = 0; i < vmNum; i++) {
+          print("Vending machine " + i + " sold: $" + vend.get(i).total()/100 + "." + vend.get(i).total()%100 );///////////////////////////////////////////////////////////////////
+          Vending v = vend.get(i);
+          for (int i1 = 0; i1 < inTotal; i1++) {
+            print("  " + iNames.get(i1) + ": " + v.sold(iNames.get(i1)));
+          }
+        }
+        print("");
+        print("");
+        String l = "";
+        for (int i = 0; i < inTotal; i++) {
+          l= iNames.get(i) + "," + iPrice.get(i) + ",";
+          for (int i1 = 0; i1 < vmNum; i1++) {
+            if(i1<vmNum-1)
+            {
+              l = l + vend.get(i1).endQtyByName(iNames.get(i)) + ",";
+            }
+            else
+            {
+              print(l + vend.get(i1).endQtyByName(iNames.get(i)));
+            }
+          }
+        }
+      }
         //EXPORT RESULTS
         try {
             File fileW = new File(filepath + (yyyy+mm+dd+1) + "Sales.txt");
@@ -166,9 +216,11 @@ public class VendControl
             PrintStream write = new PrintStream(fileW);
             write.println("Sales Totals");
                 for (int i = 0; i < vmNum; i++) {
-                    write.println("Vending machine " + i + " sold: $" + vend.get(i).total()%100 + "." + vend.get(i).total()/100 );
-                    //for (int i1 = 0; i < vend.get)    
-                    //INSERT METHOD HERE FOR SUBRECEIPT OF SOLD ITEMS
+                    write.println("Vending machine " + i + " sold: $" + vend.get(i).total()/100 + "." + vend.get(i).total()%100 );
+                    Vending v = vend.get(i);
+                    for (int i1 = 0; i1 < inTotal; i1++) {
+                      	write.println("  " + iNames.get(i1) + ": " + v.sold(iNames.get(i1)));
+                    }
                 }
             write.close();
         }
