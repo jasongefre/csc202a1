@@ -22,7 +22,7 @@ public class VendControl
         yyyy*= 10000;
         mm*=100;
         //variables
-        String filepath = "C:/_Java/";
+        String filepath = "C:\\Users\\jmg23484\\Desktop\\";
         String filename = "Inventory.txt";
         String file = "";
         boolean seek = false;
@@ -153,7 +153,6 @@ public class VendControl
                 for (int i1 = 0; i1 < c.getDesire(); i1++)
                 {
                     Vending v = vend.get(c.getVm());
-                    int attempts = 0;
                     for (int i2 = 0; i2<5; i2++)
                     {
                       	int selected = r(v.foods.size());
@@ -172,11 +171,11 @@ public class VendControl
         debug = false;
         if(debug)
         {
-            String d = vend.get(i).total()/100;
-            String c = vend.get(i).total()%100;
-            if(c.length()<2) c = "0" + c;
             print("Sales Totals"); 
             for (int i = 0; i < vmNum; i++) {
+            	String d = "" + vend.get(i).total()/100;
+                String c = "" + vend.get(i).total()%100;
+                if(c.length()<2) c = "0" + c;
                 print("Vending machine " + i + " sold: $" + d + "." + c );///////////////////////////////////////////////////////////////////
                 Vending v = vend.get(i);
                 for (int i1 = 0; i1 < inTotal; i1++) 
@@ -205,8 +204,8 @@ public class VendControl
         }
         //END PRINTING TO CONSOLE
         yyyy = Integer.parseInt(dateY.format(date));
-	mm = Integer.parseInt(dateM.format(date));
-	dd = Integer.parseInt(dateD.format(date));
+        mm = Integer.parseInt(dateM.format(date));
+        dd = Integer.parseInt(dateD.format(date));
         yyyy*= 10000;
         mm*=100;
         //EXPORT SALES
@@ -216,8 +215,8 @@ public class VendControl
             PrintStream write = new PrintStream(fileW);
             write.println("Sales Totals");
                 for (int i = 0; i < vmNum; i++) {
-                    String d = vend.get(i).total()/100;
-                    String c = vend.get(i).total()%100;
+                    String d = "" + vend.get(i).total()/100;
+                    String c = "" + vend.get(i).total()%100;
                     if(c.length()<2) c = "0" + c;
                     write.println("Vending machine " + i + " sold: $" + d + "." + c );
                     Vending v = vend.get(i);
