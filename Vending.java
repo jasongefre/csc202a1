@@ -6,57 +6,95 @@ import java.util.ArrayList;
 public class Vending {
     //PSEUDORANDOM LIMITERS
     ArrayList<Food> foods = new ArrayList<>();
-    ArrayList<Integer> foodq = new ArrayList<>();
+    ArrayList<Integer> foodEnd = new ArrayList<>();
+    ArrayList<Integer> foodStart = new ArrayList<>();
     int purchased;
+    boolean debug = false;
     //CONSTRUCTORS
-    public Vending () {}
+    public Vending (boolean debug) 
+    {
+        this.debug = debug;
+    }
 
     public void addItem (String name, int price, int quantity)
     {
         foods.add(new Food(name,price));
-        foodq.add(quantity);
+        foodStart.add(quantity);
+        foodEnd.add(quantity);
     }
 
-    public boolean purchase (int itemchoice,int total, boolean reciept)
+    public int purchase (int itemchoice,int total, boolean reciept)
     {
         Food f = foods.get(itemchoice);
-        if(total > f.getPrice() && foodq.get(itemchoice)>0)
+        if(debug)
         {
-            foodq.set(itemchoice,foodq.get(itemchoice)-1);
+            print("Customer is attempting to purchase" + f.getName());
+            print("Money entered: " + total);
+            print("Money required: " + f.getPrice());
+            print("Quantity on hand: " + foodEnd.get(itemchoice));
+        }
+        if(total > f.getPrice() && foodEnd.get(itemchoice)>0)
+        {
+            foodEnd.set(itemchoice,foodEnd.get(itemchoice)-1);
             purchased+=f.getPrice();
-            if(reciept)
+            if(debug)
             {
-                print("Purchased: " + f.getName());
-                print("Price:     " + f.getPrice());
-                print("Calories:  " + f.getCalories());
-                print("Fat:       " + f.getFat());
-                print("Carbs:     " + f.getCarbohydrates());
-                print("Protein:   " + f.getProtein());
+                if(reciept)
+                {
+                    print("    Purchased: " + f.getName());
+                    print("    Price:     " + f.getPrice());
+                    print("    Change:    " + ( total -= f.getPrice() ));
+                    print("    Calories:  " + f.getCalories());
+                    print("    Fat:       " + f.getFat());
+                    print("    Carbs:     " + f.getCarbohydrates());
+                    print("    Protein:   " + f.getProtein());
+                }
             }
-            return true;
+            
+            return total;
         }
         else
         {
-            return false;
+            if(debug)
+            {
+                if(total > f.getPrice())
+                {
+                    print("NO PURCHASE, INSUFFICIENT FUNDS.");
+                }
+                else //implied quantity is <1
+                {
+                    print("NO PURCHASE, INSUFFICIENT QUANTITY.");
+                }
+            }
+            return 0;
         }
     }
     public int total(){
         return purchased;
+    }
+    public int sold(String itemName)
+    {
+        for (int i = 0; i < foods.size(); i++)
+        {
+            if(foods.get(i).getName()==itemName)
+                return foodStart.get(i) - foodEnd.get(i);
+        }
+        return 0;
     }
     public int endQtyByName(String itemName)
     {
         for (int i = 0; i < foods.size(); i++)
         {
             if(foods.get(i).getName()==itemName)
-                return (foodq.get(i));
+                return (foodEnd.get(i));
         }
         return 0;
     }
     public int endQtyByIndex(int itemIndex)
     {
-        if(itemIndex<foodq.size())
+        if(itemIndex<foodEnd.size())
         {
-            return foodq.get(itemIndex);
+            return foodEnd.get(itemIndex);
         }
         return 0;
     }
