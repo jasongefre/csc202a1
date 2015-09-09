@@ -145,16 +145,14 @@ public class VendControl
             {
                 //RANDOM SELECTION TO DETERMINE WHICH VENDING MACHINE
                 Customer c = new Customer(r(custMoney),r(vmNum),r(custDesire));
-
                 //ATTEMPT TO PURCHASE RANDOM FOOD, MAKE 5 ATTEMPTS IN CASE OF INSUFFICIENT FUNDS (TRY ANOTHER ITEM)
                 for (int i1 = 0; i1 < c.getDesire(); i1++)
                 {
                     Vending v = vend.get(c.getVm());
                     int attempts = 0;
-                    while (attempts<5){
-                        if(!v.purchase(r(v.foods.size()),c.getMoney(),receipt))
-                            attempts++;
-                        else attempts = 5;
+                    for (int i2 = 0; i2<5; i2++)
+                    {
+                        c.setMoney(c.getMoney()-v.purchase(r(v.foods.size()),c.getMoney(),receipt));
                     }
                 }
             }
@@ -167,8 +165,10 @@ public class VendControl
             if(!fileW.exists()) fileW.createNewFile();
             PrintStream write = new PrintStream(fileW);
             write.println("Sales Totals");
-                for (int i1 = 0; i1 < vmNum; i1++) {
-                        write.println("Vending machine " + i1 + ": " + vend.get(i1).total());
+                for (int i = 0; i < vmNum; i++) {
+                    write.println("Vending machine " + i + " sold: $" + vend.get(i).total()%100 + "." + vend.get(i).total()/100 );
+                    //for (int i1 = 0; i < vend.get)    
+                    //INSERT METHOD HERE FOR SUBRECEIPT OF SOLD ITEMS
                 }
             write.close();
         }
